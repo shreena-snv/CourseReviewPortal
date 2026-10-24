@@ -1,0 +1,27 @@
+﻿
+@model CourseReviewPortal.Models.CourseReview
+
+@{
+    ViewBag.Title = "Write a Review";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="mb-4">
+            <span class="text-primary fw-bold">STUDENT FEEDBACK</span>
+            <h2 class="mt-2 fw-bold">Share Your Experience</h2>
+            <p class="text-muted">
+                Tell us what you think about your course.
+            </p>
+        </div>
+
+        <div class="panel">
+            @Html.Partial("_ReviewForm", Model)
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,108 @@
+﻿
+@model IEnumerable<CourseReviewPortal.Models.CourseReview>
+
+@{
+    ViewBag.Title = "Review Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var total = Model.Count();
+    var average = total > 0 ? Model.Average(r => r.Rating ?? 0) : 0;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <span class="text-primary fw-bold">OVERVIEW</span>
+        <h2 class="fw-bold mt-1">Course Review Dashboard</h2>
+        <p class="text-muted mb-0">
+            View student opinions and course ratings.
+        </p>
+    </div>
+
+    @Html.ActionLink("+ New Review", "Create", "Review",
+        null, new { @class = "btn btn-review px-3" })
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="panel">
+            <p class="text-muted mb-2">TOTAL REVIEWS</p>
+            <h2 class="fw-bold">@total</h2>
+            <span class="text-muted">Reviews submitted by students</span>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel">
+            <p class="text-muted mb-2">AVERAGE RATING</p>
+            <h2 class="fw-bold">
+                @average.ToString("0.0") / 5
+            </h2>
+            <span class="text-muted">Overall course satisfaction</span>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <h4 class="fw-bold mb-3">Recent Reviews</h4>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <h5>No reviews yet</h5>
+            <p class="text-muted">
+                Be the first student to share your experience.
+            </p>
+
+            @Html.ActionLink("Write First Review", "Create", "Review",
+                null, new { @class = "btn btn-review" })
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student</th>
+                        <th>Course</th>
+                        <th>Rating</th>
+                        <th>Review</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.ReviewId</td>
+                            <td>
+                                <strong>@item.StudentName</strong>
+                                <br />
+                                <small class="text-muted">@item.Email</small>
+                            </td>
+                            <td>@item.CourseName</td>
+                            <td>
+                                <span class="badge bg-warning text-dark">
+                                    @item.Rating / 5
+                                </span>
+                            </td>
+                            <td>@item.Comments</td>
+                            <td>
+                                @item.SubmittedAt.ToString("dd-MM-yyyy")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
